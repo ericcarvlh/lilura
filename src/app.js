@@ -1,35 +1,29 @@
 import express from 'express';
+import MongodbConnect from './config/dbconnect.js';
+import livro from './models/Livro.js';
+
+const conexao = await MongodbConnect();
+conexao.on("error", (erro) => {
+    console.log(`Erro ao conectar ao MongoDB: ${erro}`);
+});
+
+// conexao realizada com sucesso
+conexao.once("open", () => {
+    console.log("Conexão com MongoDB realizada com sucesso!");
+});
 
 const app = express();
 app.use(express.json()); // diz para a aplicação que os requests vem com body no formato json e que se forem, serao convertidos para json
-
-const livros = [
-    {
-        id: 1,
-        titulo: 'O Senhor dos Anéis',
-    },
-    {
-        id : 2,
-        titulo: 'Harry Potter',
-    }
-];
-
-function buscaLivro(id) {
-    return livros.findIndex(livro => {
-        return livro.id === Number(id); 
-    });
-}
-
-function atualizaLivro(index, titulo) {
-    livros[index].titulo = titulo;
-}
 
 app.get('/', (req, res) => {
     res.status(200).send('Curso de Express API');
 });
 
-app.get('/livros', (req, res) => { 
-    res.status(200).json(livros);
+app.get('/livros', async (req, res) => { 
+    // retorna tudo que encontrar na coleção livros
+    const listaLivros = await livro.find({});
+
+    res.status(200).json(listaLivros);
 });
 
 app.post("/livros", (req, res) => {

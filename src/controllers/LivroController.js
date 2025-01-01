@@ -3,9 +3,13 @@ import livroModel from "../models/Livro.js";
 class LivroController {
 
     static async listarLivros(req, res) {
-        const listaLivros = await livroModel.find({});
+        try {
+            const listaLivros = await livroModel.find({});
 
-        return res.status(200).json(listaLivros);
+            return res.status(200).json(listaLivros);
+        } catch (error) {
+            return res.status(500).json({message: `Erro ao listar livros! Erro: ${error.message}`});
+        }
     }
 
     static async cadastraLivro(req, res) {
@@ -33,7 +37,7 @@ class LivroController {
 
     static async deletaLivro(req, res) {
         try {
-            await livroModel.deleteOne({_id: req.params.id});
+            await livroModel.findByIdAndDelete(req.params.id);
 
             const livros = await livroModel.find({});
 
@@ -45,11 +49,9 @@ class LivroController {
 
     static async atualizaLivro(req, res) {
         try {
-            await livroModel.updateOne({_id: req.params.id}, req.body);
+            await livroModel.findByIdAndUpdate(req.params.id, req.body);
 
-            const livro = await livroModel.findById(req.params.id);
-
-            return res.status(200).json({message: "Livro atualizado com sucesso!", livro: livro});
+            return res.status(200).json({message: "Livro atualizado com sucesso!"});
         } catch (error) {
             return res.status(500).json({message: `Erro ao atualizar livro! Erro: ${error.message}`});
         }

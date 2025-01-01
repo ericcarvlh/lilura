@@ -16,24 +16,4 @@ conexao.once("open", () => {
 const app = express();
 app.use(livrosRoutes);
 
-app.put("/livros/:id", (req, res) => {
-    const index = buscaLivro(req.params.id);
-
-    if (index != -1) {
-        atualizaLivro(index, req.body.titulo);
-        res.status(200).json({"livro": livros[index], "message": "Livro atualizado com sucesso!"});
-    } else
-        res.status(404).json({"message": "Livro não encontrado!"});
-});
-
-app.delete("/livros/:id", (req, res) => {
-    const index = buscaLivro(req.params.id);
-
-    if (index != -1) {
-        livros.splice(index, 1);
-        return res.status(200).json({"message": "Livro excluído com sucesso!", "livros": livros});
-    } else 
-        res.status(404).json({"message": "Livro não encontrado!"});
-});
-
 export default app;

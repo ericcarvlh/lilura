@@ -1,6 +1,5 @@
 import express from 'express';
 import MongodbConnect from './config/dbconnect.js';
-import livro from './models/Livro.js';
 
 const conexao = await MongodbConnect();
 conexao.on("error", (erro) => {
@@ -17,13 +16,6 @@ app.use(express.json()); // diz para a aplicação que os requests vem com body 
 
 app.get('/', (req, res) => {
     res.status(200).send('Curso de Express API');
-});
-
-app.get('/livros', async (req, res) => { 
-    // retorna tudo que encontrar na coleção livros
-    const listaLivros = await livro.find({});
-
-    res.status(200).json(listaLivros);
 });
 
 app.post("/livros", (req, res) => {

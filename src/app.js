@@ -1,7 +1,9 @@
 import express from 'express';
 import MongodbConnect from './config/dbconnect.js';
+import livrosRoutes from './routes/livrosRoutes.js';
 
 const conexao = await MongodbConnect();
+
 conexao.on("error", (erro) => {
     console.log(`Erro ao conectar ao MongoDB: ${erro}`);
 });
@@ -12,17 +14,7 @@ conexao.once("open", () => {
 });
 
 const app = express();
-app.use(express.json()); // diz para a aplicação que os requests vem com body no formato json e que se forem, serao convertidos para json
-
-app.get('/', (req, res) => {
-    res.status(200).send('Curso de Express API');
-});
-
-app.post("/livros", (req, res) => {
-    livros.push(req.body);
-
-    res.status(201).json({"message": "Livro incluído com sucesso!"});
-});
+app.use(livrosRoutes);
 
 app.get("/livros/:id", (req, res) => {
     const index = buscaLivro(req.params.id);

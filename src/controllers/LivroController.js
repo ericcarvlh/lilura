@@ -1,4 +1,7 @@
 import livroModel from "../models/Livro.js";
+import {autor} from "../models/Autor.js";
+
+const autorModel = autor;
 
 class LivroController {
 
@@ -13,10 +16,16 @@ class LivroController {
     }
 
     static async cadastraLivro(req, res) {
-        try {
-            const novoLivro = await livroModel.create(req.body);
+        const requestBody = req.body;
 
-            return res.status(201).json({message: "Livro incluído com sucesso!", livro: novoLivro});
+        try {
+            const autorEncontrado = await autorModel.findById(requestBody.autor);
+
+            const livroCompleto = {...requestBody, autor: { ...autorEncontrado._doc }};
+
+            const livroCadastrado = await livroModel.create(livroCompleto);
+
+            return res.status(201).json({message: "Livro incluído com sucesso!", livro: livroCadastrado});
         } catch (error) {
             return res.status(500).json({message: `Erro ao incluir livro! Erro: ${error.message}`});
         }
@@ -54,6 +63,18 @@ class LivroController {
             return res.status(200).json({message: "Livro atualizado com sucesso!"});
         } catch (error) {
             return res.status(500).json({message: `Erro ao atualizar livro! Erro: ${error.message}`});
+        }
+    }
+
+    static async listarLivrosPorEditora(req, res) {
+        const editora = req.query.editora;
+
+        try {
+            const livrosPorEditora = await livroModel.find({ editora: editora });      
+            
+            res.status(200).json({livros: livrosPorEditora});
+        } catch (error) {
+            return res.status(500).json({message: `Erro ao listar livros por editora! Erro: ${error.message}`});
         }
     }
 }

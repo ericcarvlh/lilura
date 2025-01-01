@@ -6,7 +6,7 @@ const LivroSchema = new mongoose.Schema({
     titulo: {type: String, required: true },
     editora: {type: String },
     preco: {type: mongoose.Schema.Types.Double },
-    pagionas: {type: mongoose.Schema.Types.Int32 },
+    paginas: {type: mongoose.Schema.Types.Int32 },
 }, { versionKey: false });
 
 // associa a coleção e o schema

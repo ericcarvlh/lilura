@@ -16,15 +16,6 @@ conexao.once("open", () => {
 const app = express();
 app.use(livrosRoutes);
 
-app.get("/livros/:id", (req, res) => {
-    const index = buscaLivro(req.params.id);
-
-    if (index != -1)
-        res.status(200).json(livros[index]);
-    else 
-        res.status(404).json({"message": "Livro não encontrado!"});
-});
-
 app.put("/livros/:id", (req, res) => {
     const index = buscaLivro(req.params.id);
 

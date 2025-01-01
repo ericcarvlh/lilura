@@ -3,7 +3,6 @@ import LivroController from '../controllers/livroController.js';
 
 // responsavel por lidar com as rotas
 const routes = express.Router();
-routes.use(express.json());
 
 routes.get('/livros', LivroController.listarLivros);
 routes.get('/livros/:id', LivroController.obtemLivroPorId);

@@ -1,6 +1,6 @@
 import express from 'express';
 import MongodbConnect from './config/dbconnect.js';
-import livrosRoutes from './routes/livrosRoutes.js';
+import routes from './routes/index.js';
 
 const conexao = await MongodbConnect();
 
@@ -14,6 +14,6 @@ conexao.once("open", () => {
 });
 
 const app = express();
-app.use(livrosRoutes);
+routes(app);
 
 export default app;
